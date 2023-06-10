@@ -1,7 +1,7 @@
 <?php
 include "./connection.php";
 
-$querySQL = "select * from tarifs";
+$querySQL = "select * from pendidikans";
 $hasil = mysqli_query($conn, $querySQL);
 
 
@@ -23,11 +23,11 @@ if (mysqli_num_rows($hasil) > 0) {
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
 	<h1 class="h3 mb-0 text-gray-800" id="headingIndex">
-		Tarif
+		Pendidikan
 	</h1>
 	<button id="btnAddBarang" class="d-none d-md-inline-block btn btn-md btn-success shadow-md" data-bs-toggle="modal" data-bs-target="#modalTambahBarang">
 		<i class="fa fa-plus" aria-hidden="true"></i>
-		Tambah Tarif
+		Tambah Pendidikan
 	</button>
 </div>
 
@@ -40,11 +40,9 @@ if (mysqli_num_rows($hasil) > 0) {
 					<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 						<thead>
 							<tr>
-								<th>No</th>
-								<th>Jenis</th>
-								<th>Berat Minimum</th>
-								<th>Kategori</th>
-								<th>Biaya</th>
+								<th>Id</th>
+								<th>pendidikan</th>
+								<th>aktif</th>
 								<th>Action</th>
 							</tr>
 						</thead>
@@ -57,12 +55,13 @@ if (mysqli_num_rows($hasil) > 0) {
 
 								<tr>
 									<td><?= $x['id'] ?></td>
-									<td><?= $x['jenis'] ?></td>
-									<td><?= $x['beratMin'] ?></td>
+									<td><?= $x['pendidikan'] ?></td>
+									<td>
+										<?php if ($x['aktif'] == 1) {
+											echo ('<i class="fas fa-check"></i>');
+										} ?>
+									</td>
 
-									<td><?= $x['kategori'] ?></td>
-
-									<td><?= $x['biaya'] ?></td>
 
 									<td>
 										<button type="button" class="update btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahBarang"> <i class="fas fa-edit"></i></button>
@@ -83,37 +82,21 @@ if (mysqli_num_rows($hasil) > 0) {
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 		<div class="modal-content">
 			<div class="modal-header" id="staticBackdropLabel">
-				<h1>Tambah Tarif</h1>
+				<h1>Tambah Pendidikan</h1>
 			</div>
 			<form action="function.php" method="post" autocomplete="on">
+				<input type="hidden" hidden value="" id="hiddenInput" name="portal">
+				<input type="hidden" hidden value="" id="idTindakan" name="id">
 				<div class="modal-body">
 					<div class="mb-3">
-						<input type="hidden" hidden name="portal" value="" id="hiddenInput">
-						<input type="hidden" hidden value="" id="idTarif" name="idTarif">
-						<label for="jenis" class="form-label input-group">Jenis:
+						<label for="pendidikan" class="form-label input-group">Pendidikan:
 						</label>
-						<!-- <select name="jenis" class="form-control input-group" id="jenis">
-							<option value="PESAWAT" selected>PESAWAT</option>
-							<option value="KAPAL">KAPAL</option>
-						</select> -->
-						<input type="text" name="jenis" id="jenis" class="form-control input-group" placeholder="" />
+						<input type="text" name="pendidikan" id="pendidikan" class="form-control input-group" placeholder="SD" />
 					</div>
 					<div class="mb-3">
-						<label for="berat" class="form-label input-group">Berat Minimum:
+						<label for="aktif" class="form-label input-group">Aktif:
 						</label>
-						<input type="text" name="berat" id="berat" class="form-control input-group" placeholder="1 - 100" />
-					</div>
-					<div class="mb-3">
-						<label for="kategori" class="form-label input-group">Kategori:</label>
-						<!-- <select name="kategori" class="form-control input-group" id="kategori">
-							<option value="DASAR" selected>DASAR</option>
-							<option value="KELIPATAN">KELIPATAN</option>
-						</select> -->
-						<input type="text" name="kategori" id="kategori" class="form-control input-group" placeholder="pcs" />
-					</div>
-					<div class="mb-3">
-						<label for="biaya" class="form-label input-group">Biaya:</label>
-						<input type="number" name="biaya" id="biaya" class="form-control input-group" placeholder="1000" />
+						<input type="text" name="aktif" id="aktif" class="form-control input-group" placeholder="Status 1/0" />
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -132,8 +115,6 @@ if (mysqli_num_rows($hasil) > 0) {
 		</div>
 	</div>
 </div>
-
-<!-- Delete Modal -->
 
 <!-- Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -158,7 +139,6 @@ if (mysqli_num_rows($hasil) > 0) {
 	</div>
 </div>
 
-
 <!-- Page level plugins -->
 <script src="../asset/vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="../asset/vendor/datatables/dataTables.bootstrap4.min.js"></script>
@@ -168,78 +148,78 @@ if (mysqli_num_rows($hasil) > 0) {
 
 <script>
 	$(document).ready(function() {
-		const myModal = $("#modalTambahBarang");
-		let indexUpdate;
+		$(document).ready(function() {
+			const myModal = $("#modalTambahBarang");
+			let indexUpdate;
 
-		$("#btnAddBarang").click(function() {
-			myModal.find("h1").text("Tambah Tarif");
-			$("#hiddenInput").val('tambahTarif');
-			$("#btnSaveBarang").show();
-			$("#btnUpdateBarang").hide();
-			$("#btnDeleteBarang").hide();
-			$("#kode").removeAttr("disabled");
-			// console.log(id);
-			$("#idTarif").val(null);
-			// console.log($('#idTarif').val());
-			$("#jenis").val(null);
-			$("#berat").val(null);
-			$("#kategori").val(null);
-			$("#biaya").val(null);
+			$("#btnAddBarang").click(function() {
+				myModal.find("h1").text("Tambah Tindakan");
+				$("#hiddenInput").val('tambahPendidikan'); // hidden
+				$("#btnSaveBarang").show();
+				$("#btnUpdateBarang").hide();
+				$("#btnDeleteBarang").hide();
+				// $("#kode").removeAttr("disabled");
+
+				$("#pendidikan").val(null);
+				$("#idTindakan").val(null);
+				$("#aktif").val(null);
+			});
+
+
+			$.fn.updateBarang = function() {
+
+				$("#dataTable tbody").on("click", ".update", function(e) {
+					myModal.find("h1").text("Update Tarif");
+					// $("#hiddenInput").val('updateTarif');
+					$("#hiddenInput").val('updatePendidikan'); // hidden
+					$("#btnSaveBarang").hide();
+					$("#btnUpdateBarang").show();
+					$("btnDeleteBarang").hide();
+					// $("#kode").attr("disabled", true);
+					indexUpdate = $(this).closest("tr").index();
+
+					el = $("#dataTable tbody").find("tr").eq(indexUpdate);
+					// console.log(el);
+					elRow = el.find("td");
+
+					id = elRow[0].innerHTML;
+					pendidikan = elRow[1].innerHTML;
+					aktif = elRow[2].innerHTML;
+					// console.log(jenis, berat, kategori, biaya);
+					if ($('elRow[2].innerHTML').is(':empty')) {
+						aktif = "0";
+					} else {
+						aktif = "1";
+					}
+					// ambil modal
+
+					$("#idTindakan").val(id);
+					$("#pendidikan").val(pendidikan);
+					$("#aktif").val(aktif);
+					// $("#biaya").val(biaya);
+
+				});
+
+				$("#dataTable tbody").on("click", ".delete", function(e) {
+					$("#hiddenInputD").val('deletePendidikan');
+					indexUpdate = $(this).closest("tr").index();
+
+					el = $("#dataTable tbody").find("tr").eq(indexUpdate);
+					// console.log(el);
+					elRow = el.find("td");
+
+					id = elRow[0].innerHTML;
+
+					console.log(id);
+					$("#idTarifDelete").val(id);
+					console.log($('#idTarif').val());
+
+				});
+
+
+
+			};
+			$.fn.updateBarang();
 		});
-
-
-		$.fn.updateBarang = function() {
-
-			$("#dataTable tbody").on("click", ".update", function(e) {
-				myModal.find("h1").text("Update Tarif");
-				$("#hiddenInput").val('updateTarif');
-				$("#btnSaveBarang").hide();
-				$("#btnUpdateBarang").show();
-				$("btnDeleteBarang").hide();
-				$("#kode").attr("disabled", true);
-				indexUpdate = $(this).closest("tr").index();
-
-				el = $("#dataTable tbody").find("tr").eq(indexUpdate);
-				// console.log(el);
-				elRow = el.find("td");
-
-				id = elRow[0].innerHTML;
-				jenis = elRow[1].innerHTML;
-				berat = elRow[2].innerHTML;
-				kategori = elRow[3].innerHTML;
-				biaya = elRow[4].innerHTML;
-				console.log(jenis, berat, kategori, biaya);
-
-				// ambil modal
-
-				console.log(id);
-				$("#idTarif").val(id);
-				console.log($('#idTarif').val());
-				$("#jenis").val(jenis);
-				$("#berat").val(berat);
-				$("#kategori").val(kategori);
-				$("#biaya").val(biaya);
-				// $("#biaya").val(biaya);
-
-			});
-
-			$("#dataTable tbody").on("click", ".delete", function(e) {
-				$("#hiddenInputD").val('deleteTarif');
-				indexUpdate = $(this).closest("tr").index();
-
-				el = $("#dataTable tbody").find("tr").eq(indexUpdate);
-				// console.log(el);
-				elRow = el.find("td");
-
-				id = elRow[0].innerHTML;
-
-				console.log(id);
-				$("#idTarifDelete").val(id);
-				console.log($('#idTarif').val());
-
-			});
-
-		};
-		$.fn.updateBarang();
 	});
 </script>

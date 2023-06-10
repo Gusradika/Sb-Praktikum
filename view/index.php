@@ -49,7 +49,7 @@
 				<div class="sidebar-brand-icon rotate-n-15">
 					<i class="fas fa-laugh-wink"></i>
 				</div>
-				<div class="sidebar-brand-text mx-3">Toko</div>
+				<div class="sidebar-brand-text mx-3">Start Bootstrap</div>
 			</a>
 
 			<!-- Divider -->
@@ -77,14 +77,16 @@
 				<div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
 					<div class="bg-white py-2 collapse-inner rounded">
 						<h6 class="collapse-header">Master:</h6>
-						<a class="collapse-item" id="navbarBarang">tarif</a>
-						<a class="collapse-item" id="navbarKaryawan">Karyawan</a>
+						<a class="collapse-item" id="navbarTarif">Tarif</a>
+						<a class="collapse-item" id="navbarTindakan">Tindakan</a>
+						<a class="collapse-item" id="navbarPendidikan">Pendidikan</a>
+						<a class="collapse-item" id="navbarCharts">Chart Of Accounts</a>
 					</div>
 				</div>
 			</li>
 
 			<!-- Nav Item - Pages Collapse Menu Transaksi -->
-			<li class="nav-item">
+			<!-- <li class="nav-item">
 				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
 					<i class="fas fa-fw fa-cog"></i>
 					<span>Transaksi</span>
@@ -96,7 +98,7 @@
 						<a class="collapse-item" id="navbarPemesanan">Pemesanan</a>
 					</div>
 				</div>
-			</li>
+			</li> -->
 
 			<!-- Divider -->
 			<hr class="sidebar-divider d-none d-md-block" />
@@ -362,20 +364,20 @@
 			$.fn.pindahHalaman = function() {
 				$("#accordionSidebar .nav-item").click(function(event) {
 					// JIKA NAVIGASI BARANG DIKLIK
-					if (event.target.id === "navbarBarang") {
+					if (event.target.id === "navbarTarif") {
 						$("#content #isi").load("./tarif.php");
 					}
 					// JIKA NAVIGASI PERMINTAAN DIKLIK
-					else if (event.target.id === "navbarPermintaan") {
-						$("#content #isi").load("./permintaan.php");
+					else if (event.target.id === "navbarTindakan") {
+						$("#content #isi").load("./tindakan.php");
 					}
 					// JIKA NAVIGASI KARYAWAN DIKLIK
-					else if (event.target.id === 'navbarKaryawan') {
-						$('#content #isi').load('./karyawan.php');
+					else if (event.target.id === 'navbarPendidikan') {
+						$('#content #isi').load('./pendidikan.php');
 					}
 					// JIKA NAVIGASI PEMESANAN DIKLIK
-					else if (event.target.id === 'navbarPemesanan') {
-						$('#content #isi').load('./pemesanan.php');
+					else if (event.target.id === 'navbarCharts') {
+						$('#content #isi').load('./coa.php');
 					}
 				});
 			};
